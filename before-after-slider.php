@@ -27,7 +27,7 @@ function add_ba_slider_script() {
 
 	wp_enqueue_script(
 		'bxslider-js',
-		plugins_url( 'js/bxslider.min.js' , __FILE__ ),
+		plugins_url( 'js/jquery.bxslider.min.js' , __FILE__ ),
 		array( 'jquery' ),
 		'',
 		true
@@ -35,7 +35,7 @@ function add_ba_slider_script() {
 
 	wp_enqueue_script(
 		'easing-js',
-		plugins_url( 'js/easing.1.3.js' , __FILE__ ),
+		plugins_url( 'js/jquery.easing.1.3.js' , __FILE__ ),
 		array( 'jquery' ),
 		'',
 		true
@@ -43,7 +43,7 @@ function add_ba_slider_script() {
 
 	wp_enqueue_script(
 		'fitvids-js',
-		plugins_url( 'js/fitvids.js' , __FILE__ ),
+		plugins_url( 'js/jquery.fitvids.js' , __FILE__ ),
 		array( 'jquery' ),
 		'',
 		true
