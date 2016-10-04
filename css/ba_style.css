@@ -1,0 +1,5 @@
+@charset 'UTF-8';
+
+#acf-image_ba .acf-button-add.add-row-before {
+	display: none;
+}

@@ -77,6 +77,13 @@ function add_to_admin_script() {
 		true
 	);
 
+	wp_enqueue_style(
+		'admin-panel-style',
+		plugins_url( 'css/ba_style.css' , __FILE__ ),
+		'',
+		''
+	);
+
 }
 add_action( 'admin_enqueue_scripts', 'add_to_admin_script' );
 
@@ -181,32 +188,38 @@ function get_ba_image_content( $atts ) {
 	$post_title = esc_html( $post_content->post_title );
 
 	$html  = '';
-	$html .= '<div class="comarison_image">';
 
 	$b_image_id = get_post_meta( $post_id, sprintf( 'image_ba_%d__b', $num ), true );
-	$before_image = wp_get_attachment_image_src( $b_image_id, 'thumb_509_372_second' );
-	$before_image_tag = sprintf(
-		'<img class="comparison" src="%1$s" width="%2$d" height="%3$d" alt="%4$s" title="%4$s">',
-		esc_url( $before_image[0] ),
-		intval( $before_image[1] ),
-		intval( $before_image[2] ),
-		$post_title . ' 施工前_' . intval( $num + 1 )
-	);
 
-	$html .= $before_image_tag;
+	if ( ! empty( $b_image_id ) ) {
 
-	$a_image_id = get_post_meta( $post_id, sprintf( 'image_ba_%d__a', $num ), true );
-	$after_image = wp_get_attachment_image_src( $a_image_id, 'thumb_509_372_second' );
-	$after_image_tag = sprintf(
-		'<img class="comparison" src="%1$s" width="%2$d" height="%3$d" alt="%4$s" title="%4$s">',
-		esc_url( $after_image[0] ),
-		intval( $after_image[1] ),
-		intval( $after_image[2] ),
-		$post_title . ' 施工後_' . intval( $num + 1 )
-	);
+		$html .= '<div class="comarison_image">';
 
-	$html .= $after_image_tag;
-	$html .= '</div>';
+		$before_image     = wp_get_attachment_image_src( $b_image_id, 'thumb_509_372_second' );
+		$before_image_tag = sprintf(
+			'<img class="comparison" src="%1$s" width="%2$d" height="%3$d" alt="%4$s" title="%4$s">',
+			esc_url( $before_image[ 0 ] ),
+			intval( $before_image[ 1 ] ),
+			intval( $before_image[ 2 ] ),
+			$post_title . ' 施工前_' . intval( $num + 1 )
+		);
+
+		$html .= $before_image_tag;
+
+		$a_image_id      = get_post_meta( $post_id, sprintf( 'image_ba_%d__a', $num ), true );
+		$after_image     = wp_get_attachment_image_src( $a_image_id, 'thumb_509_372_second' );
+		$after_image_tag = sprintf(
+			'<img class="comparison" src="%1$s" width="%2$d" height="%3$d" alt="%4$s" title="%4$s">',
+			esc_url( $after_image[ 0 ] ),
+			intval( $after_image[ 1 ] ),
+			intval( $after_image[ 2 ] ),
+			$post_title . ' 施工後_' . intval( $num + 1 )
+		);
+
+		$html .= $after_image_tag;
+		$html .= '</div>';
+
+	}
 
 	return $html;
 

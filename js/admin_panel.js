@@ -6,7 +6,7 @@
 		'title': '選択部分をコピー( ctrl + c )して貼り付けたい部分へペーストします。'
 	});
 
-	$( '#acf-image_ba .acf-button' ).on( 'click', function( event ) {
+	$( '#acf-image_ba .acf-button, #acf-image_ba .acf-button-remove' ).on( 'click', function( event ) {
 
 		var target = $( 'td:nth-child(4)' ).find( 'input[type="text"]' );
 		var targetCount = $(target).length - 1;
@@ -58,6 +58,9 @@
 
 	});
 
+	/**
+	 * Renumbering when renove button click.
+	 */
 	$( '#acf-image_ba .acf-button-remove' ).on( 'click', function( event ) {
 
 		refresh( event );
