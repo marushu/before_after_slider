@@ -119,9 +119,9 @@ function get_ba_image_slider_content( $atts ) {
 
 
 			$html .= '<div class="ba-slider">';
-			$html .= $before_image_tag;
-			$html .= '<div class="resize">';
 			$html .= $after_image_tag;
+			$html .= '<div class="resize">';
+			$html .= $before_image_tag;
 			$html .= '</div>';
 			$html .= '<span class="handle"></span>';
 			$html .= '</div>';
