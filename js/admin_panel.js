@@ -5,6 +5,7 @@
 		'onclick': 'this.select()',
 		'title': '選択部分をコピー( ctrl + c )して貼り付けたい部分へペーストします。'
 	});
+
 	$( '#acf-image_ba .acf-button' ).on( 'click', function( event ) {
 
 		var target = $( 'td:nth-child(4)' ).find( 'input[type="text"]' );
@@ -16,6 +17,12 @@
 			'value':  addValue,
 			'onclick': 'this.select()',
 			'title': '選択部分をコピー( ctrl + c )して貼り付けたい部分へペーストします。'
+		});
+
+		$( '#acf-image_ba .acf-button-remove' ).on( 'click', function( event ) {
+
+			refresh( event );
+
 		});
 
 	});
@@ -51,44 +58,29 @@
 
 	});
 
-	$( '#acf-image_ba .acf-button-remove' ).on( 'click', function() {
+	$( '#acf-image_ba .acf-button-remove' ).on( 'click', function( event ) {
 
-		console.log( 'クリック' );
-		var trCount = $( '#ba_sort tr' ).not( '.row-clone' ).length;
-		console.log( trCount );
+		refresh( event );
 
-		for ( i = 0; i <= ( trCount - 1 ); i++ ) {
+	});
+
+	/**
+	 * Renumbering field.
+	 * @param event
+	 */
+	function refresh( event ) {
+
+		var current = $( event.target ).closest( 'tr' );
+		var startNum = $( current ).index();
+		var trCounts = $( '#ba_sort tr' ).not( '.row-clone' ).length;
+		for ( i = startNum; i <= ( trCounts - 1 ); i++ ) {
 
 			var updateTarget = $( '#ba_sort tr' ).eq( i ).find( 'td:nth-child(4) input[type="text"]' );
-			console.log( updateTarget );
-
-			var addValue = '[ba_image num="' + ( i ) + '"]';
-			console.log( addValue );
-
-			$( updateTarget ).attr({
-				'value': addValue
-			});
-
-		}
-
-	} );
-
-	function reflesh() {
-
-		var trCount = $( '#ba_sort tr' ).not( '.row-clone' ).length;
-		console.log( trCount );
-
-		for ( i = 0; i <= trCount; i++ ) {
-
-			var updateTarget = $( '#ba_sort tr' ).eq( i -1 ).find( 'td:nth-child(4) input[type="text"]' );
 			var addValue = '[ba_image num="' + ( i - 1 ) + '"]';
-			$( updateTarget ).attr({
-				'value': addValue
-			});
+			$( updateTarget ).val( addValue );
 
 		}
 
 	}
-
 
 })( jQuery );
