@@ -80,3 +80,8 @@
 ul.bxslider {
   margin: 0 !important;
 }
+
+.bxslider li img {
+  display: block;
+  margin: 0 auto;
+}

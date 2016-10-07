@@ -93,19 +93,24 @@ function get_ba_image_slider_content( $atts ) {
 	global $post;
 	extract( shortcode_atts( array(
 		'class'          => 'bxslider',
-		'post_type'      => 'works',
+		'post_type'      => array( 'works' ),
 		'posts_per_page' => 999,
+		'page_slug'      => '',
 	), $atts ) );
 
 	//var_dump( $post_type );
+	var_dump( get_option( 'show_on_front' ) );
+	var_dump( get_option( 'page_on_front' ) );
+	var_dump( get_option( 'page_for_posts' ) );
 
-	if ( is_singular( $post_type ) ) {
+
+	if ( is_singular( $post_type ) || is_post_type_archive() || is_home() ) {
 
 		$post_id = get_the_ID();
 		$post_data = get_post( $post_id );
 		$post_title = esc_html( $post_data->post_title );
 		$ba_images_count = get_post_meta( $post_id, 'image_ba', true );
-		//var_dump( $ba_images_count );
+		var_dump( get_field( 'image_ba', $post_id ) );
 
 		$html  = '';
 
@@ -114,43 +119,57 @@ function get_ba_image_slider_content( $atts ) {
 
 		for ( $i = 0; $i < intval( $ba_images_count ); $i++ ) {
 
-			$html .= '<li>';
-
-			$b_image_id       = get_post_meta( $post_id, sprintf( 'image_ba_%d__b', $i ), true );
-			$before_image     = wp_get_attachment_image_src( $b_image_id, 'thmb_1020_500' );
-			$before_image_tag = sprintf(
-				'<img src="%1$s" width="%2$d" height="%3$d" alt="%4$s" title="%4$s">',
-				esc_url( $before_image[ 0 ] ),
-				intval( $before_image[ 1 ] ),
-				intval( $before_image[ 2 ] ),
-				$post_title . ' 施工前_' . intval( $i + 1 )
-			);
-
-			//$html .= $before_image_tag;
-
+			$b_image_id = get_post_meta( $post_id, sprintf( 'image_ba_%d__b', $i ), true );
 			$a_image_id      = get_post_meta( $post_id, sprintf( 'image_ba_%d__a', $i ), true );
-			$after_image     = wp_get_attachment_image_src( $a_image_id, 'thmb_1020_500' );
-			$after_image_tag = sprintf(
-				'<img src="%1$s" width="%2$d" height="%3$d" alt="%4$s" title="%4$s">',
-				esc_url( $after_image[ 0 ] ),
-				intval( $after_image[ 1 ] ),
-				intval( $after_image[ 2 ] ),
-				$post_title . ' 施工後_' . intval( $i + 1 )
-			);
 
-			//$html .= $after_image_tag;
+			if ( ! empty( $b_image_id ) ) {
+
+				$html .= '<li>';
+
+				//$b_image_id       = get_post_meta( $post_id, sprintf( 'image_ba_%d__b', $i ), true );
+				$before_image     = wp_get_attachment_image_src( $b_image_id, 'thmb_1020_500' );
+				$before_image_tag = ! empty( $b_image_id )
+					? sprintf(
+						'<img src="%1$s" width="%2$d" height="%3$d" alt="%4$s" title="%4$s">',
+						esc_url( $before_image[ 0 ] ),
+						intval( $before_image[ 1 ] ),
+						intval( $before_image[ 2 ] ),
+						$post_title . ' 施工前_' . intval( $i + 1 )
+					)
+					: '';
+
+				//$a_image_id      = get_post_meta( $post_id, sprintf( 'image_ba_%d__a', $i ), true );
+				$after_image     = wp_get_attachment_image_src( $a_image_id, 'thmb_1020_500' );
+				$after_image_tag = ! empty( $a_image_id )
+					? sprintf(
+						'<img src="%1$s" width="%2$d" height="%3$d" alt="%4$s" title="%4$s">',
+						esc_url( $after_image[ 0 ] ),
+						intval( $after_image[ 1 ] ),
+						intval( $after_image[ 2 ] ),
+						$post_title . ' 施工後_' . intval( $i + 1 )
+					)
+					: '';
+
+				if ( ! empty( $b_image_id ) && !empty( $a_image_id ) ) {
+
+					$html .= '<div class="ba-slider">';
+					$html .= $after_image_tag;
+					$html .= '<div class="resize">';
+					$html .= $before_image_tag;
+					$html .= '</div>';
+					$html .= '<span class="handle"></span>';
+					$html .= '</div>';
+
+				} else {
+
+					$html .= $before_image_tag;
+
+				}
 
 
-			$html .= '<div class="ba-slider">';
-			$html .= $after_image_tag;
-			$html .= '<div class="resize">';
-			$html .= $before_image_tag;
-			$html .= '</div>';
-			$html .= '<span class="handle"></span>';
-			$html .= '</div>';
+				$html .= '</li>';
 
-
-			$html .= '</li>';
+			}
 
 		}
 
@@ -190,12 +209,13 @@ function get_ba_image_content( $atts ) {
 	$html  = '';
 
 	$b_image_id = get_post_meta( $post_id, sprintf( 'image_ba_%d__b', $num ), true );
+	$a_image_id      = get_post_meta( $post_id, sprintf( 'image_ba_%d__a', $num ), true );
 
 	if ( ! empty( $b_image_id ) ) {
 
-		$html .= '<div class="comarison_image">';
-
-		$before_image     = wp_get_attachment_image_src( $b_image_id, 'thumb_509_372_second' );
+		$before_image     = ! empty( $a_image_id )
+			? wp_get_attachment_image_src( $b_image_id, 'thumb_509_372_second' )
+			: wp_get_attachment_image_src( $b_image_id, 'thmb_1020_500' );
 		$before_image_tag = sprintf(
 			'<img class="comparison" src="%1$s" width="%2$d" height="%3$d" alt="%4$s" title="%4$s">',
 			esc_url( $before_image[ 0 ] ),
@@ -204,18 +224,21 @@ function get_ba_image_content( $atts ) {
 			$post_title . ' 施工前_' . intval( $num + 1 )
 		);
 
+		$after_image     = ! empty( $a_image_id )
+			? wp_get_attachment_image_src( $a_image_id, 'thumb_509_372_second' )
+			: '';
+		$after_image_tag = ! empty( $a_image_id )
+			? sprintf(
+				'<img class="comparison" src="%1$s" width="%2$d" height="%3$d" alt="%4$s" title="%4$s">',
+				esc_url( $after_image[ 0 ] ),
+				intval( $after_image[ 1 ] ),
+				intval( $after_image[ 2 ] ),
+				$post_title . ' 施工後_' . intval( $num + 1 )
+				)
+			: '';
+
+		$html .= '<div class="comarison_image">';
 		$html .= $before_image_tag;
-
-		$a_image_id      = get_post_meta( $post_id, sprintf( 'image_ba_%d__a', $num ), true );
-		$after_image     = wp_get_attachment_image_src( $a_image_id, 'thumb_509_372_second' );
-		$after_image_tag = sprintf(
-			'<img class="comparison" src="%1$s" width="%2$d" height="%3$d" alt="%4$s" title="%4$s">',
-			esc_url( $after_image[ 0 ] ),
-			intval( $after_image[ 1 ] ),
-			intval( $after_image[ 2 ] ),
-			$post_title . ' 施工後_' . intval( $num + 1 )
-		);
-
 		$html .= $after_image_tag;
 		$html .= '</div>';
 
