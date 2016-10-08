@@ -109,9 +109,7 @@
 	//});
 
 	function recovery ( elm ) {
-
-		console.log('ファイヤーー!!!');
-
+		
 		var checkClass = elm.attr('class');
 		if ( checkClass === 'resize' ) {
 
