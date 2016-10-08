@@ -4,9 +4,11 @@
 
 		var winW = $( window ).width();
 		var moveFlag = false;
+		var sliderListCount = $( '.bxslider li' ).length;
 
-		if ( winW > 799 ) {
+		if ( winW > 799 && sliderListCount > 1 ) {
 			var slider = $( '.bxslider' ).bxSlider({
+				mode: 'fade',
 				auto: true,
 				autoHover: true,
 				adaptiveHeight: false,
@@ -59,6 +61,7 @@
 			var slider = $('.bxslider').bxSlider({
 				auto: false,
 				autoHover: true,
+				adaptiveHeight: true,
 				tickerHover: true,
 				useCSS: false,
 				touchEnabled: false,
