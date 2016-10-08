@@ -9,7 +9,7 @@
 			var slider = $( '.bxslider' ).bxSlider({
 				auto: true,
 				autoHover: true,
-				//adaptiveHeight: false,
+				adaptiveHeight: false,
 				tickerHover: true,
 				useCSS: false,
 				touchEnabled: false,
@@ -110,6 +110,8 @@
 
 	function recovery ( elm ) {
 
+		console.log('ファイヤーー!!!');
+
 		var checkClass = elm.attr('class');
 		if ( checkClass === 'resize' ) {
 
@@ -133,10 +135,12 @@
 
 			var resizeTarget = $( this ).find( '.resize' );
 			var handleTarget = $( this ).find( '.handle' );
-			$( resizeTarget ).not( ':animated' ).animate({ width: '50%' });
-			$( handleTarget ).not( ':animated' ).animate({ left: '50%' });
-			$( resizeTarget ).removeAttr( 'style' );
-			$( handleTarget ).removeAttr( 'style' );
+			$( resizeTarget ).not( ':animated' ).animate({ width: '50%' }, function () {
+				$( resizeTarget ).removeAttr( 'style' );
+			});
+			$( handleTarget ).not( ':animated' ).animate({ left: '50%' }, function () {
+				$( handleTarget ).removeAttr( 'style' );
+			});
 
 		});
 

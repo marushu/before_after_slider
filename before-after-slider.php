@@ -93,13 +93,14 @@ function get_ba_image_slider_content( $atts ) {
 	global $post;
 	extract( shortcode_atts( array(
 		'class'          => 'bxslider',
-		'post_type'      => 'works',
+		'post_type'      => array( 'works' ),
 		'posts_per_page' => 999,
 	), $atts ) );
 
 	//var_dump( $post_type );
 
-	if ( is_singular( $post_type ) ) {
+
+	if ( is_singular( $post_type ) || is_post_type_archive() || is_home() ) {
 
 		$post_id = get_the_ID();
 		$post_data = get_post( $post_id );
