@@ -94,7 +94,7 @@ function get_ba_image_slider_content( $atts ) {
 	extract( shortcode_atts( array(
 		'class'          => 'bxslider',
 		'post_type'      => array( 'works' ),
-		'posts_per_page' => 999,
+		'posts_per_page' => 1,
 		'page_slug'      => '',
 	), $atts ) );
 
@@ -165,7 +165,6 @@ function get_ba_image_slider_content( $atts ) {
 					$html .= $before_image_tag;
 
 				}
-
 
 				$html .= '</li>';
 
