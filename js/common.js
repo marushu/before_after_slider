@@ -46,8 +46,6 @@
 
 				},
 				onSlideBefore: function ( $slideElement, oldIndex, newIndex ) {
-					console.log($slideElement.width());
-					console.log($slideElement.find('.ba-slider .resize img').attr('width'));
 					var listWidth = $slideElement.width();
 					var resizeContainer = $slideElement.find('.ba-slider .resize img');
 					resizeContainer.css({width: listWidth});
@@ -116,7 +114,6 @@
 
 		}
 		$('.ba-slider').each(function () {
-			console.log( $(this).find('.resize img').innerWidth() );
 			$( this ).beforeAfter();
 		});
 

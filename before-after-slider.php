@@ -17,6 +17,7 @@
  */
 add_image_size( 'thmb_1020_500', 1020, 500, true );
 add_image_size( 'thumb_509_999', 509, 9999, true );
+add_image_size( 'thumb_1000_999', 1000, 9999, true );
 
 /**
  * Add Pinterest Pins and Boards :)
@@ -208,7 +209,16 @@ function get_ba_image_content( $atts ) {
 	$html  = '';
 
 	$b_image_id = get_post_meta( $post_id, sprintf( 'image_ba_%d__b', $num ), true );
-	$a_image_id      = get_post_meta( $post_id, sprintf( 'image_ba_%d__a', $num ), true );
+	$a_image_id = get_post_meta( $post_id, sprintf( 'image_ba_%d__a', $num ), true );
+
+	$b_image_text = get_post_meta( $post_id, sprintf( 'image_ba_%d__b_text', $num ), true );
+	$b_image_text = ! empty( $b_image_text )
+		? $b_image_text
+		: '';
+	$a_image_text = get_post_meta( $post_id, sprintf( 'image_ba_%d__a_text', $num ), true );
+	$a_image_text = ! empty( $a_image_text )
+		? $a_image_text
+		: '';
 
 	if ( ! empty( $b_image_id ) ) {
 
@@ -236,9 +246,25 @@ function get_ba_image_content( $atts ) {
 				)
 			: '';
 
-		$html .= '<div class="comarison_image">';
+		$html .= '<div class="comarison_image_ba">';
+		$html .= '<div class="com-b each-com">';
+		$html .= '<h3 class="ba_image_title ba_before">Before</h3>';
+		$html .= '<figure>';
 		$html .= $before_image_tag;
+		$html .= '<legend>';
+		$html .= esc_html( $b_image_text );
+		$html .= '</legend>';
+		$html .= '</figure>';
+		$html .= '</div>';
+		$html .= '<div class="com-a each-com">';
+		$html .= '<h3 class="ba_image_title ba_after">After</h3>';
+		$html .= '<figure>';
 		$html .= $after_image_tag;
+		$html .= '<legend>';
+		$html .= esc_html( $a_image_text );
+		$html .= '</legend>';
+		$html .= '</figure>';
+		$html .= '</div>';
 		$html .= '</div>';
 
 	}
@@ -247,3 +273,34 @@ function get_ba_image_content( $atts ) {
 
 }
 add_shortcode( 'ba_image', 'get_ba_image_content' );
+
+
+/**
+ * Replace '|||' to '<br>' tag at post title area. :)
+ * @param $atts
+ *
+ * @return mixed
+ */
+function insert_br( $title ) {
+
+	$new_title = str_replace( '|||', '<br>', $title );
+	return $new_title;
+
+}
+add_filter( 'the_title', 'insert_br' );
+
+
+/**
+ * Remove '<br>'tag from titile at specific area. :)
+ * @param $title
+ *
+ * @return mixed
+ */
+function remove_title_br_filter( $title ) {
+
+	//var_dump( $title );
+
+	$remove_delimiter_title = str_replace( '<br>', '', $title );
+	return $remove_delimiter_title;
+
+}
